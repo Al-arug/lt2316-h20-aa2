@@ -59,8 +59,8 @@ class Trainer:
         number_layers = hyperparamaters["number_layers"]
         batch_size =  hyperparamaters["batch_size"]
         epochs =  hyperparamaters["epochs"]
-       # optim_type =  hyperparamaters["optim_t"] 
-       # lr = hyperparamaters["lr"] 
+        optim_type =  hyperparamaters["optim"] 
+        lr = hyperparamaters["lr"] 
         
         
         train_y = torch.split(train_y, batch_size)
@@ -73,11 +73,11 @@ class Trainer:
         loss_function = nn.CrossEntropyLoss()
         loss_function = loss_function.to(self.device)
         
-      #  if optim_type == 1:
-       #     optimizer = optim.Adam(model.parameters(),lr= 0.001)
-       # else: 
-        #    optimizer = optim.SGD(model.parameters(), lr=0.001 , momentum=0.9)
-        optimizer = optim.Adam(model.parameters(),lr= 0.001)
+        if optim_type == 1:
+            optimizer = optim.Adam(model.parameters(),lr= lr)
+        else: 
+            optimizer = optim.SGD(model.parameters(), lr=lr , momentum=0.9)
+       # optimizer = optim.Adam(model.parameters(),lr= 0.001)
        # prediction=[]
        # labels=[]
         
@@ -113,13 +113,13 @@ class Trainer:
         labels = [i for l in label for i in l]
         
         a = accuracy_score(labels,pred)
-      #  p = precision_score(labels,pred, average='weighted')
-       # f1= f1_score(labels,pred, average='weighted')
+        p = precision_score(labels,pred, average='weighted')
+        f1= f1_score(labels,pred, average='weighted')
         r = recall_score(labels,pred, average='weighted')
         
-        scores={"accuracy":a,"recall":r} #,"f1":f1   ,"percision":p
+        scores={"accuracy":a,"recall":r,"f1":f1,"percision":p  } 
         #,"loss":int(total_loss)
-        print(scores)
+        #print(scores)
         self.save_model(epochs, model, optimizer, total_loss, scores, hyperparamaters, hyperparamaters["name"])
         pass
 
